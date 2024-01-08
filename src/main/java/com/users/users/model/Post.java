@@ -1,16 +1,11 @@
 package com.users.users.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Size;
-
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -20,7 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Post {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
 
     private Integer name;
 

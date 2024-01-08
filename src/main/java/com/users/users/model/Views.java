@@ -15,11 +15,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Views {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
     @Column(name = "post_id")
-    private int postId;
+    private Integer postId;
     @Column(name = "count_view")
-    private int view;
+    private Integer view;
 
     public Views(int postId, int view) {
         this.postId = postId;

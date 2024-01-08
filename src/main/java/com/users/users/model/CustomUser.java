@@ -2,11 +2,10 @@ package com.users.users.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-import javax.validation.constraints.Size;
 
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -18,7 +17,7 @@ public class CustomUser {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
     @Size(min=3, max=15)
     private String name;
 

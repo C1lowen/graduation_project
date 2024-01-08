@@ -6,9 +6,6 @@ import com.users.users.model.CustomUser;
 import com.users.users.model.Post;
 import com.users.users.model.Views;
 import com.users.users.repository.PostRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,15 +33,21 @@ import java.util.UUID;
 @Service
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private UserService userService;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private CommentsService commentsService;
-    @Autowired
-    private ViewsService viewsService;
+    private final UserService userService;
+
+
+    private final CommentsService commentsService;
+
+    private final ViewsService viewsService;
+
+    public PostService(PostRepository postRepository, UserService userService, CommentsService commentsService, ViewsService viewsService) {
+        this.postRepository = postRepository;
+        this.userService = userService;
+        this.commentsService = commentsService;
+        this.viewsService = viewsService;
+    }
 
     @Value("${path.images}")
     private String uploadFolder;
@@ -54,7 +58,7 @@ public class PostService {
     public void save(Post post){
         postRepository.save(post);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostDTO> findAllPosts(){
         return postRepository.findAll().stream()
                 .map(post -> {
@@ -88,13 +92,13 @@ public class PostService {
 
         return bookPage;
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public Post getPostById(Integer id){
         Post post = postRepository.getById(id);
         post.setCountComments(commentsService.countCommentsByPost(id));
         return post;
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostDTO> getLastPosts(){
 
          return postRepository.getLastPosts().stream()

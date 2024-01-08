@@ -2,21 +2,22 @@ package com.users.users.controller;
 
 import com.users.users.model.Answer;
 import com.users.users.service.AnswerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 
 @Controller
 public class AnswerController {
-    @Autowired
-    private AnswerService answerService;
-    @Autowired
-    private PostController postController;
+
+    private final AnswerService answerService;
+
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
+
     @GetMapping("/createAttribute")
     public String createAttribute(Model model){
         Answer answer = new Answer();

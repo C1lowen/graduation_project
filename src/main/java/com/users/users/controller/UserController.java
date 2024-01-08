@@ -1,17 +1,12 @@
 package com.users.users.controller;
 
 import com.users.users.dto.Search;
-import com.users.users.model.CustomUser;
 import com.users.users.service.CommentsService;
 import com.users.users.service.PostService;
 import com.users.users.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.users.users.dto.UserDTO;
 
@@ -22,19 +17,20 @@ import java.util.stream.Collectors;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private PostService postService;
-
-    @Autowired
-    private CommentsService commentsService;
-
-    @Autowired
-    private PostController postController;
+    private final UserService userService;
 
 
+    private final PostService postService;
+
+
+    private final CommentsService commentsService;
+
+    public UserController(UserService userService, PostService postService, CommentsService commentsService) {
+        this.userService = userService;
+        this.postService = postService;
+        this.commentsService = commentsService;
+    }
 
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ROLE_Admin')")

@@ -1,7 +1,6 @@
 package com.users.users.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,7 +9,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Data
 public class PostDTO {
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -20,7 +19,7 @@ public class PostDTO {
     private String folder;
     private Integer countComments;
     private Integer views;
-    public PostDTO(int id, String customUser, LocalDate date, String title, String text, String folder, Integer countComments) {
+    public PostDTO(Integer id, String customUser, LocalDate date, String title, String text, String folder, Integer countComments) {
         this.id = id;
         this.name = customUser;
         this.date = date;

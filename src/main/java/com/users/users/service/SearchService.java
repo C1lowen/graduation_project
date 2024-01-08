@@ -1,34 +1,29 @@
 package com.users.users.service;
 
-import com.users.users.dto.PostDTO;
 import com.users.users.dto.PostSearchDTO;
-import com.users.users.model.Post;
-import com.users.users.model.Views;
-import com.users.users.repository.PostRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class SearchService {
+    private final PostService postService;
 
-    @Autowired
-    private PostService postService;
+    private final CommentsService commentsService;
 
-    @Autowired
-    private CommentsService commentsService;
-    @Autowired
-    private ViewsService viewsService;
+    public SearchService(PostService postService, CommentsService commentsService) {
+        this.postService = postService;
+        this.commentsService = commentsService;
+    }
 
     private  List<String> words;
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostSearchDTO> search(String info){
         words = Arrays.stream(info.split("[ ]")).toList();
         return postService.findAllPosts().stream()

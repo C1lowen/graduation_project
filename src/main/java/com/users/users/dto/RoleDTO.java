@@ -9,10 +9,10 @@ import java.util.Map;
 @Data
 public class RoleDTO {
 
-    private int id;
+    private Integer id;
     private Map<String, List<CustomUser>> infoRoles;
 
-    public RoleDTO(int id, Map<String, List<CustomUser>> infoRoles) {
+    public RoleDTO(Integer id, Map<String, List<CustomUser>> infoRoles) {
         this.id = id;
         this.infoRoles = infoRoles;
     }

@@ -1,49 +1,39 @@
 package com.users.users.controller;
 
-import com.users.users.dto.PostDTO;
-import com.users.users.dto.Search;
+
 import com.users.users.model.*;
 import com.users.users.service.CommentsService;
 import com.users.users.service.PostService;
 import com.users.users.service.UserService;
 import com.users.users.service.ViewsService;
-import org.mapstruct.control.MappingControl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class PostController {
 
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private CommentsService commentsService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ViewsService viewsService;
 
+    private final PostService postService;
+
+    private final CommentsService commentsService;
+
+    private final UserService userService;
+
+    private final ViewsService viewsService;
+
+    public PostController(PostService postService, CommentsService commentsService, UserService userService, ViewsService viewsService) {
+        this.postService = postService;
+        this.commentsService = commentsService;
+        this.userService = userService;
+        this.viewsService = viewsService;
+    }
 
     @Transactional
     @PostMapping ("/upload")

@@ -5,7 +5,6 @@ import com.users.users.model.Role;
 
 import com.users.users.repository.*;
 import com.users.users.model.CustomUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,17 +27,24 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private CommentsService commentsService;
+    private final RoleRepository roleRepository;
+
+
+    private final PasswordEncoder passwordEncoder;
+
+
+    private final CommentsService commentsService;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, CommentsService commentsService) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.commentsService = commentsService;
+    }
 
     public List<UserDTO> findAll() {
         return createListUserDTO(userRepository.findAll());
@@ -55,7 +61,7 @@ public class UserService implements UserDetailsService {
 
        userRepository.save(customUser);
     }
-
+    @Transactional(readOnly = true)
     public Optional<CustomUser> findByName(String name){
        return userRepository.findByName(name);
     }
@@ -74,21 +80,20 @@ public class UserService implements UserDetailsService {
         });
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<CustomUser> findById(Integer id){
         return userRepository.findById(id);
     }
 
-
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         CustomUser user = findByName(username).orElseThrow(() -> new UsernameNotFoundException(
                 "Пользователь с именем " + username + " не найден"
         ));
 
         List<GrantedAuthority> roles = List.of(
-                new SimpleGrantedAuthority("ROLE_" +user.getRole().getName())
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().getName())
         );
 
         return new User(user.getName(), user.getPassword(), roles);
@@ -98,17 +103,13 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public List<UserDTO> getByName(String name) {
-        return createListUserDTO(userRepository.getByName(name));
-    }
-    @Transactional
     private List<UserDTO> createListUserDTO(List<CustomUser> users){
         return users.stream()
                 .map(user -> new UserDTO(user.getId(),user.getName(), user.getRole().getName(),user.getPassword(), user.getEmail(), null, null, null))
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public String findUser(Search search, Model model){
         String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 

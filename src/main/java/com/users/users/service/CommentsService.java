@@ -2,9 +2,8 @@ package com.users.users.service;
 
 import com.users.users.model.Comments;
 import com.users.users.repository.CommentsRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,18 +11,20 @@ import java.util.Optional;
 @Service
 public class CommentsService {
 
-    @Autowired
-    private CommentsRepository commentsRepository;
+    private final CommentsRepository commentsRepository;
 
-
+    public CommentsService(CommentsRepository commentsRepository) {
+        this.commentsRepository = commentsRepository;
+    }
+    @Transactional(readOnly = true)
     public void save(Comments comments){
         commentsRepository.save(comments);
     }
-
+    @Transactional(readOnly = true)
     public List<Comments> findByIdPost(Integer idPost){
         return commentsRepository.findByIdPost(idPost);
     }
-
+    @Transactional(readOnly = true)
     public Integer countCommentsByPost(Integer id) {
        return commentsRepository.countCommentsByPost(id);
     }
@@ -39,11 +40,11 @@ public class CommentsService {
     public void deleteByIdPosts(Integer id){
         commentsRepository.deleteByIdPosts(id);
     }
-
+    @Transactional(readOnly = true)
     public Optional<Comments> findById(Integer id) {
         return commentsRepository.findById(id);
     }
-
+    @Transactional
     public void updateInfo(String parentName, String newName){
         commentsRepository.updateInfo(parentName, newName);
     }

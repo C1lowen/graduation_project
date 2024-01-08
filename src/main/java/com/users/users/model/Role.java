@@ -18,15 +18,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private List<CustomUser> users;
-
-    public Role(int id) {
-        this.id = id;
-    }
-
 
 }

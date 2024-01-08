@@ -1,19 +1,20 @@
 package com.users.users.service;
 
-import com.users.users.dto.AnswerDTO;
 import com.users.users.model.Answer;
 import com.users.users.repository.AnswerRepository;
-import com.users.users.repository.RoleRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
 @Service
 public class AnswerService {
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
+
+    public AnswerService(AnswerRepository answerRepository) {
+        this.answerRepository = answerRepository;
+    }
+
     @Transactional
     public void save(Answer answer) {
         answerRepository.save(answer);

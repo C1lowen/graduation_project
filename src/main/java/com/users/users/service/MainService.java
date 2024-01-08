@@ -2,17 +2,17 @@ package com.users.users.service;
 
 import com.users.users.dto.UserDTO;
 import com.users.users.model.CustomUser;
-import com.users.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -23,10 +23,15 @@ import java.util.stream.IntStream;
 
 @Service
 public class MainService {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
+    private final UserService userService;
+
+    private final AuthenticationManager authenticationManager;
+
+    public MainService(UserService userService, AuthenticationManager authenticationManager) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+    }
 
     public String checkValideted(UserDTO user){
         String name = user.getName();
@@ -53,7 +58,7 @@ public class MainService {
         }
         return "";
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDTO userPanelSetting(){
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         CustomUser customUser = userService.findByName(name).orElse(new CustomUser());
@@ -91,5 +96,4 @@ public class MainService {
         HttpSession session = request.getSession(true);
         session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
     }
-
 }

@@ -1,44 +1,38 @@
 package com.users.users.controller;
 
 import com.users.users.dto.PostDTO;
-import com.users.users.dto.Search;
 import com.users.users.dto.UserDTO;
 import com.users.users.model.Answer;
-import com.users.users.model.CustomUser;
 import com.users.users.model.Post;
-import com.users.users.service.CommentsService;
 import com.users.users.service.MainService;
 import com.users.users.service.PostService;
 import com.users.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 @Controller
 public class MainController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private MainService mainService;
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private PostController postController;
+
+    private final UserService userService;
+
+    private final MainService mainService;
+
+    private final PostService postService;
+
+    public MainController(UserService userService, MainService mainService, PostService postService) {
+        this.userService = userService;
+        this.mainService = mainService;
+        this.postService = postService;
+    }
 
     @GetMapping("/login")
     public String authentication(Model model){

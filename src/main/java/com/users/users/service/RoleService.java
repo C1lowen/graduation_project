@@ -3,8 +3,8 @@ package com.users.users.service;
 import com.users.users.dto.RoleDTO;
 import com.users.users.model.Role;
 import com.users.users.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +14,13 @@ import java.util.stream.Collectors;
 @Service
 public class RoleService {
 
-    @Autowired
-    private RoleRepository roleRepository;
 
+    private final RoleRepository roleRepository;
+
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+    @Transactional(readOnly = true)
     public List<RoleDTO> findAll() {
         return createListRoleDTO(roleRepository.findAll());
     }
@@ -28,7 +32,7 @@ public class RoleService {
     public void deleteById(Integer id) {
         roleRepository.deleteById(id);
     }
-
+    @Transactional(readOnly = true)
     public List<RoleDTO> getByName(String name) {
         return createListRoleDTO(roleRepository.getByName(name));
     }
